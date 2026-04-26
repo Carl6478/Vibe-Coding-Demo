@@ -1,0 +1,5 @@
+{
+  "buildCommand": "flutter build web --release",
+  "outputDirectory": "build/web",
+  "ignoreCommand": "git diff --quiet HEAD~ HEAD -- lib/ assets/ pubspec.yaml"
+}
