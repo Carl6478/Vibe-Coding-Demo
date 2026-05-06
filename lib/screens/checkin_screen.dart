@@ -6,6 +6,7 @@ import '../models/person.dart';
 import '../providers/checkin_provider.dart';
 import '../providers/people_provider.dart';
 import '../widgets/checkin_dialog.dart';
+import '../widgets/weather_indicator.dart';
 
 class CheckInScreen extends ConsumerStatefulWidget {
   const CheckInScreen({super.key});
@@ -284,6 +285,7 @@ class _CheckInScreenState extends ConsumerState<CheckInScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Check-In System'),
+        actions: const [WeatherIndicator()],
       ),
       body: SafeArea(
         child: Padding(
