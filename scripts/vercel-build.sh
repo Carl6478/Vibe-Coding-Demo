@@ -1,14 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-FLUTTER_VERSION="${FLUTTER_VERSION:-stable}"
+FLUTTER_VERSION="${FLUTTER_VERSION:-3.41.9}"
+FLUTTER_CHANNEL="${FLUTTER_CHANNEL:-stable}"
 
-echo "Installing Flutter (${FLUTTER_VERSION})..."
-curl -fsSL "https://storage.googleapis.com/flutter_infra_release/releases/${FLUTTER_VERSION}/linux/flutter_linux_3.24.5-${FLUTTER_VERSION}.tar.xz" -o flutter.tar.xz
+echo "Installing Flutter ${FLUTTER_VERSION} (${FLUTTER_CHANNEL})..."
+curl -fsSL "https://storage.googleapis.com/flutter_infra_release/releases/${FLUTTER_CHANNEL}/linux/flutter_linux_${FLUTTER_VERSION}-${FLUTTER_CHANNEL}.tar.xz" -o flutter.tar.xz
 tar xf flutter.tar.xz
 export PATH="$PWD/flutter/bin:$PATH"
 
+git config --global --add safe.directory "$PWD/flutter"
 flutter --version
+flutter config --no-analytics
 flutter config --enable-web
 
 echo "Fetching Dart/Flutter dependencies..."
