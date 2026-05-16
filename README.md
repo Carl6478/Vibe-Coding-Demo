@@ -1,6 +1,6 @@
 # Reception App
 
-Modern reception and check-in software built with Flutter, Riverpod, and Supabase.
+Modern reception and check-in software built with Flutter, and Supabase.
 
 This project is a lightweight front-desk system for managing people, check-ins, activity logs, and CSV-based roster imports across desktop and web. It is designed to feel fast, simple, and operational from day one.
 
