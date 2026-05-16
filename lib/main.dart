@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/router.dart';
+import 'core/schema_validator.dart';
 import 'core/supabase_client.dart';
 import 'core/theme.dart';
 
@@ -12,6 +13,7 @@ Future<void> main() async {
 
 final _supabaseInitProvider = FutureProvider<void>((ref) async {
   await SupabaseService.initialize();
+  await AppSchemaValidator.validate();
 });
 
 class ReceptionApp extends ConsumerWidget {
@@ -32,7 +34,7 @@ class ReceptionApp extends ConsumerWidget {
         home: _StartupErrorScreen(error: error),
       ),
       data: (_) {
-    final router = ref.watch(appRouterProvider);
+        final router = ref.watch(appRouterProvider);
         return MaterialApp.router(
           title: 'Reception App',
           theme: AppTheme.lightTheme,
@@ -48,9 +50,7 @@ class _SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: CircularProgressIndicator()),
-    );
+    return const Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 }
 
@@ -76,7 +76,7 @@ class _StartupErrorScreen extends StatelessWidget {
             Text(error.toString()),
             const SizedBox(height: 12),
             const Text(
-              'Fix: update SUPABASE_URL and SUPABASE_ANON_KEY in .env, then hot restart.',
+              'Fix: confirm .env values and run the reception schema SQL from README.md, then hot restart.',
             ),
           ],
         ),

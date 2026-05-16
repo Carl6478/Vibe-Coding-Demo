@@ -23,7 +23,7 @@ class WeatherIndicator extends ConsumerWidget {
           ),
         ),
       ),
-      error: (_, __) => Padding(
+      error: (_, stackTrace) => Padding(
         padding: const EdgeInsets.only(right: 12),
         child: Icon(
           Icons.cloud_off,
@@ -43,7 +43,7 @@ class WeatherIndicator extends ConsumerWidget {
                   snapshot.iconUrl,
                   width: 28,
                   height: 28,
-                  errorBuilder: (context, _, __) => Icon(
+                  errorBuilder: (context, error, stackTrace) => Icon(
                     Icons.cloud,
                     color: colorScheme.onSurfaceVariant,
                   ),
@@ -64,4 +64,3 @@ class WeatherIndicator extends ConsumerWidget {
     );
   }
 }
-

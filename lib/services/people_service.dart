@@ -1,12 +1,17 @@
+import '../core/person_id_generator.dart';
 import '../core/supabase_client.dart';
 import '../models/person.dart';
 import 'checkin_service.dart';
 
 class PeopleService {
-  PeopleService({CheckInService? checkInService})
-    : _checkInService = checkInService ?? CheckInService();
+  PeopleService({
+    CheckInService? checkInService,
+    PersonIdGenerator? personIdGenerator,
+  }) : _checkInService = checkInService ?? CheckInService(),
+       _personIdGenerator = personIdGenerator ?? PersonIdGenerator();
 
   final CheckInService _checkInService;
+  final PersonIdGenerator _personIdGenerator;
 
   Future<List<Person>> fetchPeople() async {
     final response = await SupabaseService.client
@@ -21,19 +26,34 @@ class PeopleService {
       return;
     }
 
-    final withIds = people.where((person) => person.id.trim().isNotEmpty).toList();
-    final withoutIds = people.where((person) => person.id.trim().isEmpty).toList();
+    final withIds = people
+        .where((person) => person.id.trim().isNotEmpty)
+        .toList();
+    final withoutIds = people
+        .where((person) => person.id.trim().isEmpty)
+        .toList();
 
     final client = SupabaseService.client;
     if (withIds.isNotEmpty) {
-      await client.from('people').upsert(
-            withIds.map((person) => person.toInsertMap()).toList(),
-          );
+      await client
+          .from('people')
+          .upsert(withIds.map((person) => person.toInsertMap()).toList());
     }
 
     if (withoutIds.isNotEmpty) {
-      await client.from('people').insert(
-            withoutIds.map((person) => person.toInsertMap()).toList(),
+      final generatedPeople = withoutIds
+          .map(
+            (person) => Person(
+              id: _personIdGenerator.nextId(),
+              firstName: person.firstName,
+              lastName: person.lastName,
+            ),
+          )
+          .toList();
+      await client
+          .from('people')
+          .insert(
+            generatedPeople.map((person) => person.toInsertMap()).toList(),
           );
     }
   }
